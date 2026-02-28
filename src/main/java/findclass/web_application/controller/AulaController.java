@@ -5,8 +5,12 @@ import findclass.web_application.domain.RegraDeNegocioException;
 import findclass.web_application.domain.aula.AulaService;
 import findclass.web_application.domain.aula.DadosAgendamentoAula;
 import findclass.web_application.domain.professor.Especialidade;
+import findclass.web_application.domain.usuario.Usuario;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +43,7 @@ public class AulaController {
     }
 
     @GetMapping("formulario")
+    @PreAuthorize("hasRole('ATENDENTE') OR hasRole('ALUNO')")
     public String carregarPaginaAgendaAula(Long id, Model model) {
         if (id != null) {
             model.addAttribute("dados", service.carregarPorId(id));
@@ -50,14 +55,15 @@ public class AulaController {
     }
 
     @PostMapping
-    public String cadastrar(@Valid @ModelAttribute("dados") DadosAgendamentoAula dados, BindingResult result, Model model) {
+    @PreAuthorize("hasRole('ATENDENTE') || hasRole('ALUNO')")
+    public String cadastrar(@Valid @ModelAttribute("dados") DadosAgendamentoAula dados, BindingResult result, Model model, @AuthenticationPrincipal Usuario logado) {
         if (result.hasErrors()) {
             model.addAttribute("dados", dados);
             return PAGINA_CADASTRO;
         }
 
         try {
-            service.cadastrar(dados);
+            service.cadastrar(dados, logado);
             return REDIRECT_LISTAGEM;
         } catch (RegraDeNegocioException e) {
             model.addAttribute("erro", e.getMessage());

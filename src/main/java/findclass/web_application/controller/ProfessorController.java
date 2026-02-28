@@ -6,8 +6,13 @@ import findclass.web_application.domain.professor.DadosCadastroProfessor;
 import findclass.web_application.domain.professor.DadosListagemProfessor;
 import findclass.web_application.domain.professor.Especialidade;
 import findclass.web_application.domain.professor.ProfessorService;
+import findclass.web_application.domain.usuario.Perfil;
+import findclass.web_application.domain.usuario.Usuario;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +40,7 @@ public class ProfessorController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ATENDENTE') OR hasRole('ALUNO')")
     public String carregarPaginaListagem(@PageableDefault Pageable paginacao, Model model) {
         var professoresCadastrados = service.listar(paginacao);
         model.addAttribute("professores", professoresCadastrados);
@@ -42,6 +48,7 @@ public class ProfessorController {
     }
 
     @GetMapping("formulario")
+    @PreAuthorize("hasRole('ATENDENTE')")
     public String carregarPaginaCadastro(Long id, Model model) {
         if (id != null) {
             model.addAttribute("dados", service.carregarPorId(id));
@@ -53,6 +60,7 @@ public class ProfessorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ATENDENTE')")
     public String cadastrar(@Valid @ModelAttribute("dados") DadosCadastroProfessor dados, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("dados", dados);
@@ -70,6 +78,7 @@ public class ProfessorController {
     }
 
     @DeleteMapping
+    @PreAuthorize("hasRole('ATENDENTE')")
     public String excluir(Long id) {
         service.excluir(id);
         return REDIRECT_LISTAGEM;

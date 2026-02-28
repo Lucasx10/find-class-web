@@ -6,6 +6,7 @@ import findclass.web_application.domain.aluno.DadosCadastroAluno;
 import findclass.web_application.domain.aluno.AlunoService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("alunos")
+@PreAuthorize("hasRole('ATENDENTE')")
 public class AlunoController {
 
     private static final String PAGINA_LISTAGEM = "aluno/listagem-alunos";

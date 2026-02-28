@@ -2,6 +2,7 @@ package findclass.web_application.domain.professor;
 
 import jakarta.transaction.Transactional;
 import findclass.web_application.domain.RegraDeNegocioException;
+import findclass.web_application.domain.usuario.Perfil;
 import findclass.web_application.domain.usuario.UsuarioService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class ProfessorService {
         }
 
         if (dados.id() == null) {
-            Long id = usuarioService.salvarUsuario(dados.nome(), dados.email(), dados.cpf());
+            Long id = usuarioService.salvarUsuario(dados.nome(), dados.email(), dados.cpf(), Perfil.PROFESSOR);
             repository.save(new Professor(id, dados));
         } else {
             var professor = repository.findById(dados.id()).orElseThrow();
