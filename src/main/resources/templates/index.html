@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template.html}">
+<head>
+    <title>Find Class</title>
+</head>
+
+<body>
+    <div layout:fragment="conteudo">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-logo">
+                        <img src="../static/assets/logo.png" alt="Médico com máscara" th:src="@{/assets/logo.png}"> Find Class
+                    </h1>
+
+                    <h2 class="hero-title">Encontre Professores de <span>diversas áreas</span></h2>
+                    <p class="hero-subtitle">e agende sua aula com facilidade</p>
+                </div>
+
+                <div class="hero-image">
+                    <img src="../static/assets/professor.jpg" alt="Médico com máscara" th:src="@{/assets/professor.png}">
+                    <img src="../static/assets/professora.jpg" alt="Médica com estetoscópio" th:src="@{/assets/professora.png}">
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
