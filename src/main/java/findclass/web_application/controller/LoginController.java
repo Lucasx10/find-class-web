@@ -50,4 +50,5 @@ public class LoginController {
             return FORMULARIO_ALTERAR_SENHA;
         }
     }
+
 }

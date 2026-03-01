@@ -25,7 +25,9 @@ public class Usuario implements UserDetails {
     private String email;
     private String senha;
     private Boolean senhaAlterada;
-    
+    private String token;
+    private java.time.LocalDateTime expiracaoToken;
+
     @Enumerated(EnumType.STRING)
     private Perfil perfil;
 
@@ -76,6 +78,22 @@ public class Usuario implements UserDetails {
 
     public void setSenhaAlterada(Boolean senhaAlterada) {
         this.senhaAlterada = senhaAlterada;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+    
+    public java.time.LocalDateTime getExpiracaoToken() {
+        return expiracaoToken;
+    }
+
+    public void setExpiracaoToken(java.time.LocalDateTime expiracaoToken) {
+        this.expiracaoToken = expiracaoToken;
     }
     
 }

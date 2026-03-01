@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import findclass.web_application.domain.RegraDeNegocioException;
+import findclass.web_application.domain.usuario.email.EmailService;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -16,9 +17,12 @@ public class UsuarioService implements UserDetailsService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder encriptador;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder encriptador) {
+    private final EmailService emailService;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder encriptador, EmailService emailService) {
         this.usuarioRepository = usuarioRepository;
         this.encriptador = encriptador;
+        this.emailService = emailService;
     }
 
     @Override
@@ -54,6 +58,19 @@ public class UsuarioService implements UserDetailsService {
         logado.setSenhaAlterada(true);
 
         usuarioRepository.save(logado);
+    }
+
+    public void enviarToken(String email) {
+        var usuario = usuarioRepository.findByEmailIgnoreCase(email).orElseThrow(
+            () -> new RegraDeNegocioException("E-mail não encontrado!")
+        );
+
+        String token = UUID.randomUUID().toString();
+        usuario.setToken(token);
+        usuario.setExpiracaoToken(java.time.LocalDateTime.now().plusMinutes(15));
+        usuarioRepository.save(usuario);
+
+        emailService.enviarEmailSenha(usuario);
     }
     
 }
