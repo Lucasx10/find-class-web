@@ -2,7 +2,6 @@ package findclass.web_application.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +21,7 @@ public class ConfiguracoesSeguranca {
     public SecurityFilterChain filtrosSeguranca(HttpSecurity http, OncePerRequestFilter filtroAlteracaoSenha) throws Exception {
         return http
                 .authorizeHttpRequests(req -> {
-                        req.requestMatchers("/css/**", "/js/**", "/assets/**", "/", "/index", "/home", "/esqueci-minha-senha").permitAll();
+                        req.requestMatchers("/css/**", "/js/**", "/assets/**", "/", "/index", "/home", "/esqueci-minha-senha", "/recuperar-conta").permitAll();
                         // req.requestMatchers("/alunos/**").hasAnyRole("ATENDENTE");
                         // req.requestMatchers(HttpMethod.GET, "/professores").hasAnyRole("ATENDENTE", "ALUNOS");
                         // req.requestMatchers("/professores/**").hasAnyRole("ATENDENTE");

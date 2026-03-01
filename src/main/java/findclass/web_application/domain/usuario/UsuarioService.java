@@ -2,6 +2,8 @@ package findclass.web_application.domain.usuario;
 
 import java.util.UUID;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -73,4 +75,31 @@ public class UsuarioService implements UserDetailsService {
         emailService.enviarEmailSenha(usuario);
     }
     
+    private static void atualizarUsuarioSpringSecurity(Usuario logado) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var newAuth = new UsernamePasswordAuthenticationToken(logado, null, authentication.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    }
+
+    public void recuperarConta(String codigo, DadosRecuperacaoConta dados) {
+        Usuario usuario = usuarioRepository.findByTokenIgnoreCase(codigo)
+            .orElseThrow(
+                    () -> new RegraDeNegocioException("Código de recuperação inválido!")
+            );
+        if(usuario.getExpiracaoToken().isBefore(java.time.LocalDateTime.now())){
+            throw new RegraDeNegocioException("Código de recuperação expirado!");
+        }
+
+        if(!dados.novaSenha().equals(dados.novaSenhaConfirmacao())){
+            throw new RegraDeNegocioException("Senha e confirmação não conferem!");
+        }
+
+        String senhaCriptografada = encriptador.encode(dados.novaSenha());
+        usuario.alterarSenha(senhaCriptografada);
+
+        usuario.setToken(null);
+        usuario.setExpiracaoToken(null);
+        usuarioRepository.save(usuario);
+    }
+
 }
