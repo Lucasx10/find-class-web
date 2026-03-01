@@ -2,6 +2,7 @@ package findclass.web_application.domain.aula;
 
 import jakarta.transaction.Transactional;
 import findclass.web_application.domain.professor.ProfessorRepository;
+import findclass.web_application.domain.usuario.Perfil;
 import findclass.web_application.domain.usuario.Usuario;
 import findclass.web_application.domain.RegraDeNegocioException;
 import findclass.web_application.domain.aluno.AlunoRepository;
@@ -24,8 +25,11 @@ public class AulaService {
         this.alunoRepository = alunoRepository;
     }
 
-    public Page<DadosListagemAula> listar(Pageable paginacao) {
-        return repository.findAllByOrderByData(paginacao).map(DadosListagemAula::new);
+    public Page<DadosListagemAula> listar(Pageable paginacao, Usuario logado) {
+        if (logado.getPerfil() == Perfil.ATENDENTE) {
+            return repository.findAllByOrderByData(paginacao).map(DadosListagemAula::new);
+        }
+        return repository.buscaPersonalizadaAulas(logado.getId(), paginacao).map(DadosListagemAula::new);
     }
 
     @Transactional

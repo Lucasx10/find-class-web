@@ -36,8 +36,8 @@ public class AulaController {
     }
 
     @GetMapping
-    public String carregarPaginaListagem(@PageableDefault Pageable paginacao, Model model) {
-        var aulasAtivas = service.listar(paginacao);
+    public String carregarPaginaListagem(@PageableDefault Pageable paginacao, Model model, @AuthenticationPrincipal Usuario logado) {
+        var aulasAtivas = service.listar(paginacao, logado);
         model.addAttribute("aulas", aulasAtivas);
         return PAGINA_LISTAGEM;
     }

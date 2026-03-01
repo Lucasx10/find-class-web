@@ -32,7 +32,7 @@ public class ProfessorService {
         }
 
         if (dados.id() == null) {
-            Long id = usuarioService.salvarUsuario(dados.nome(), dados.email(), dados.cpf(), Perfil.PROFESSOR);
+            Long id = usuarioService.salvarUsuario(dados.nome(), dados.email(), Perfil.PROFESSOR);
             repository.save(new Professor(id, dados));
         } else {
             var professor = repository.findById(dados.id()).orElseThrow();

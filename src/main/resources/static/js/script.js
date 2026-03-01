@@ -21,7 +21,7 @@ $('#updateModal').on('show.bs.modal', function (e) {
 document.addEventListener("DOMContentLoaded", function() {
     const especialidadeSelect = document.getElementById('especialidade');
     if (especialidadeSelect) {
-        const professorSelect = document.getElementById('idprofessor');
+        const professorSelect = document.getElementById('idProfessor');
 
         especialidadeSelect.addEventListener('change', function() {
             const especialidade = especialidadeSelect.value;

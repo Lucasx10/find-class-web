@@ -30,7 +30,7 @@ public class AlunoService {
         }
 
         if (dados.id() == null) {
-            Long usuarioId = usuarioService.salvarUsuario(dados.nome(), dados.email(), dados.cpf(), Perfil.ALUNO);
+            Long usuarioId = usuarioService.salvarUsuario(dados.nome(), dados.email(), Perfil.ALUNO);
             repository.save(new Aluno(usuarioId, dados));
         } else {
             var aluno = repository.findById(dados.id()).orElseThrow();
